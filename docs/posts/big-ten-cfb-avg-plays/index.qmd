@@ -1,0 +1,139 @@
+---
+title: "The Impact of the Clock Rule in the Big Ten"
+author: "Alexa Henry"
+date: '2023-10-10'
+categories: [football, big ten]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+football22 <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs22.csv")
+football23 <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs23.csv")
+```
+```{r}
+head(football22)
+```
+
+
+```{r}
+bigten22 <- football22 |> 
+  filter(Conference == "Big Ten Conference")
+bigten23 <- football23 |> 
+  filter(Conference == "Big Ten Conference")
+```
+I started off by creating a data frame to separate the seasons. 
+
+Averages:
+
+Then I averaged offensive plays for each season. 
+```{r}
+bigten22 |>
+  group_by(Team) |>
+  summarise (
+    mean_OffensivePlays = mean(OffensivePlays)
+  ) 
+
+bigten23 |>
+  group_by(Team) |>
+  summarise (
+    mean_OffensivePlays = mean(OffensivePlays)
+  ) 
+```
+Then, I created a new data frame so it's just the average offensive plays and the big ten teams. 
+```{r}
+offavg22 <- bigten22 |>
+  group_by(Team) |>
+  summarise (
+    mean_OffensivePlays = mean(OffensivePlays)
+  ) 
+
+offavg23 <- bigten23 |>
+  group_by(Team) |>
+  summarise (
+    mean_OffensivePlays = mean(OffensivePlays)
+  ) 
+```
+
+Bar Charts 
+
+I created a bar chart with the data. 
+```{r}
+ggplot()+
+  geom_bar(
+    data=offavg22, 
+    aes(x=Team, weight=`mean_OffensivePlays`)
+  )
+```
+
+
+```{r}
+ggplot()+
+  geom_bar(
+    data=offavg22, 
+    aes(
+      x=reorder(Team, `mean_OffensivePlays`),
+      weight=`mean_OffensivePlays`
+      )
+  )
+
+ggplot()+
+  geom_bar(
+    data=offavg23, 
+    aes(
+      x=reorder(Team, `mean_OffensivePlays`),
+      weight=`mean_OffensivePlays`
+      )
+  )
+```
+So, the X-axis looks a little messy but let me cook. I reordered the chart so the most amount of plays is ordered from least to most amount of plays. 
+
+Loaded the library...
+```{r}
+library(scales)
+```
+
+Bam!!!! Here's my final charts
+```{r}
+ggplot()+
+  geom_bar(
+    data=offavg22, 
+    aes(x=reorder(Team, `mean_OffensivePlays`),
+        weight=`mean_OffensivePlays`)) +
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title="Big Ten Offensive Plays 2022", 
+    x="Team",
+    y="mean_OffensivePlays") +
+  theme_minimal() +
+  coord_flip()
+```
+
+
+```{r}
+ggplot()+
+  geom_bar(
+    data=offavg23, 
+    aes(x=reorder(Team, `mean_OffensivePlays`),
+        weight=`mean_OffensivePlays`)) +
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title="Big Ten Offensive Plays 2023", 
+    x="Team",
+    y="mean_OffensivePlays") +
+  theme_minimal() +
+  coord_flip()
+```
+In conclusion, it appears the Big Ten teams were running around the same amount of plays but this season it appears that there is some difference. Even with the rule change, it appears schools like Penn State are running more plays this season despite the rule change. Offensive play leaders like Purdue are now second in running offensive plays this season. 
+
+It looks like Big Ten teams are running more offensive plays this season compared to last season even with the rule change. What's interesting is that Iowa remained last in the Big Ten for running offensive plays. Needless to say, after the Penn State game this season the conversation of replacing the offensive coordinator was revisited. In my opinion, based on these results, I think it would be time to move on from the OC at Iowa. 
+
+What's good to see is that Maryland remains at the top. But what's interesting to see is that Ohio State is in the middle of the pact in the 2022 season but closer to the bottom in 2023 and Michigan actually started running less offensive plays this year compared to last year. Maybe they think, all defense wins games? Interesting. 
+
+Maybe, this data can be revisited when the season concludes. 
