@@ -9,20 +9,24 @@ format:
     code-fold: true
 ---
 
-```{r}
+
+
+```{r, output=false}
 library(tidyverse)
 ```
 
-```{r}
+```{r, output=false}
 football22 <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs22.csv")
 football23 <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs23.csv")
 ```
-```{r}
+
+
+```{r, output=false}
 head(football22)
 ```
 
 
-```{r}
+```{r, output=false}
 bigten22 <- football22 |> 
   filter(Conference == "Big Ten Conference")
 bigten23 <- football23 |> 
@@ -33,7 +37,7 @@ I started off by creating a data frame to separate the seasons.
 Averages:
 
 Then I averaged offensive plays for each season. 
-```{r}
+```{r, output=false}
 bigten22 |>
   group_by(Team) |>
   summarise (
@@ -47,7 +51,7 @@ bigten23 |>
   ) 
 ```
 Then, I created a new data frame so it's just the average offensive plays and the big ten teams. 
-```{r}
+```{r, output=false}
 offavg22 <- bigten22 |>
   group_by(Team) |>
   summarise (
@@ -64,7 +68,7 @@ offavg23 <- bigten23 |>
 Bar Charts 
 
 I created a bar chart with the data. 
-```{r}
+```{r, output=false}
 ggplot()+
   geom_bar(
     data=offavg22, 
@@ -73,7 +77,7 @@ ggplot()+
 ```
 
 
-```{r}
+```{r, output=false}
 ggplot()+
   geom_bar(
     data=offavg22, 
@@ -95,7 +99,7 @@ ggplot()+
 So, the X-axis looks a little messy but let me cook. I reordered the chart so the most amount of plays is ordered from least to most amount of plays. 
 
 Loaded the library...
-```{r}
+```{r, output=false}
 library(scales)
 ```
 
@@ -108,9 +112,9 @@ ggplot()+
         weight=`mean_OffensivePlays`)) +
   scale_y_continuous(labels=comma) + 
   labs(
-    title="Big Ten Offensive Plays 2022", 
-    x="Team",
-    y="mean_OffensivePlays") +
+    title="Purdue tops Big Ten in Playmaking in 2022", 
+    x="School",
+    y="Average Offensive Plays") +
   theme_minimal() +
   coord_flip()
 ```
@@ -124,9 +128,9 @@ ggplot()+
         weight=`mean_OffensivePlays`)) +
   scale_y_continuous(labels=comma) + 
   labs(
-    title="Big Ten Offensive Plays 2023", 
-    x="Team",
-    y="mean_OffensivePlays") +
+    title="Nittany Lions Run off with 2023 plays", 
+    x="School",
+    y="Average Offensive Plays") +
   theme_minimal() +
   coord_flip()
 ```
