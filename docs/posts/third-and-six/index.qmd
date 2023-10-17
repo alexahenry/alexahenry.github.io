@@ -1,0 +1,48 @@
+---
+title: "Third and Six"
+author: "Alexa Henry"
+date: '2023-10-17'
+categories: [football, big ten]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r, output=false}
+library(tidyverse)
+library(cfbfastR)
+```
+
+### Load play by play data
+
+```{r}
+plays <- load_cfb_pbp(seasons = c(2019, 2020, 2021, 2022, 2023))
+```
+
+```{r}
+third_and_six <- plays |> filter(down==3, distance==6)
+```
+
+```{r}
+third_and_six |> 
+  group_by (play_type) |>
+  summarise(
+    plays = n()
+  )
+```
+```{r}
+play_types <- c("Fumble Return Touchdown","Interception Return", "Interception Return Touchdown", "Pass Reception", "Passing Touchdown", "Rushing Touchdown", "Safety")
+
+rush_plays <- c("Rush", "Rushing Touchdown")
+  
+third_and_six |>
+  filter(play_type %in% rush_plays) |> 
+  summarise(
+    plays = n()
+  )
+```
+```{r}
+third_and_six <- 2459 / 11655 *100
+```
+21.098 or 21%
