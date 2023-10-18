@@ -31,10 +31,10 @@ third_and_six |>
     plays = n()
   )
 ```
-```{r}
-play_types <- c("Fumble Return Touchdown","Interception Return", "Interception Return Touchdown", "Pass Reception", "Passing Touchdown", "Rushing Touchdown", "Safety")
 
-rush_plays <- c("Rush", "Rushing Touchdown")
+
+```{r}
+play_types <- c("Rush", "Rushing Touchdown")
   
 third_and_six |>
   filter(play_type %in% rush_plays) |> 
@@ -42,7 +42,59 @@ third_and_six |>
     plays = n()
   )
 ```
+
+
 ```{r}
-third_and_six <- 2459 / 11655 *100
+2459 / 11655 *100
 ```
 21.098 or 21%
+
+```{r}
+third_and_six |>
+  filter(play_type %in% rush_plays) |>
+  filter(yards_to_goal < 50) |> 
+  summarise(
+    plays = n(),
+    min = min(yards_gained),
+    max = max(yards_gained),
+    median = median(yards_gained),
+    yards_gainedAvg = mean(yards_gained)
+  )
+```
+In the first go-around of the code, it just gave me an average of 6 which to me didn't seem entirely right. Added in min and max and saw that the max was 79 yards which means there are some outlier plays. Added in a Median which gave a more accurate gain of yards. 
+
+From there, I added in a filter of less than 50 yards. This gave me an average of 5 yards but still the same median. However, the max is 42. Which I think is more reasonable. 
+
+I then added in plays count and it said there are 1,401 plays where third and six are less than 50 yards. I think this is a better model than just looking at just the average because now it shows that out of 11,655 plays only 1,401 are third and six plays. 
+
+```{r}
+third_and_six |>
+  filter(play_type %in% rush_plays) |>
+  filter(yards_to_goal < 50) |> 
+  group_by(pos_team) |>
+  summarise(
+    plays = n(),
+    min = min(yards_gained),
+    max = max(yards_gained),
+    median = median(yards_gained),
+    yards_gainedAvg = mean(yards_gained)
+  ) |>
+  arrange(desc(plays))
+```
+I found that Air Force runs third and six plays that are less than 50 yards about 21 times which is the most out of all the teams. 
+
+```{r}
+third_and_six |>
+  filter(play_type %in% rush_plays) |>
+  filter(yards_to_goal < 30) |> 
+  filter (pos_team == "Maryland") |>
+  filter (period == 4) |>
+  summarise(
+    plays = n(),
+    min = min(yards_gained),
+    max = max(yards_gained),
+    median = median(yards_gained),
+    yards_gainedAvg = mean(yards_gained)
+  )
+```
+Bar Chart 
