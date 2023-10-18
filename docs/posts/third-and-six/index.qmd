@@ -97,4 +97,69 @@ third_and_six |>
     yards_gainedAvg = mean(yards_gained)
   )
 ```
-Bar Chart 
+Looking at the fact there are only 2 times that Maryland has been in a third and six situation where they were on the opponents territory, it basically looks like that Maryland doesn't find themselves in these situations a lot. Which would make sense that what happened against Illinois...happened. 
+
+Graphic 
+
+```{r}
+plays_third_and_six <- third_and_six |>
+  group_by(pos_team) |>
+  filter(play_type %in% rush_plays) |>
+  filter(yards_to_goal < 50) |>
+  filter (period == 4) |>
+  summarise(
+    plays = n(),
+    min = min(yards_gained),
+    max = max(yards_gained),
+    median = median(yards_gained),
+    yards_gainedAvg = mean(yards_gained)
+  ) |> arrange (desc(plays))
+```
+I'm trying to show the list with the teams with the most amount of plays. 
+
+```{r}
+plays_third_and_six <- third_and_six |>
+  group_by(pos_team) |>
+  filter(play_type %in% rush_plays) |>
+  filter(yards_to_goal < 50) |>
+  filter (period == 4) |>
+  summarise(
+    plays = n()
+  ) |> arrange (desc(plays))
+```
+I took out the yards gained and the averages because for some reason my list was organizing by yards gained instead of plays. 
+
+```{r}
+plays_third_and_six |>
+  arrange(desc(plays)) |>
+  top_n(10)|>
+  select (pos_team, plays)
+```
+
+
+```{r}
+top10 <- plays_third_and_six |>
+  arrange(desc(plays)) |>
+  head(10) |> 
+  select(pos_team, plays)
+```
+I don't know if I'm right but I think R is seeing that some teams have the same amount of plays so it's thinking that they are also in the top 10. But I'm not sure why it's showing me more than ten teams.  
+```{r}
+library(ggplot2)
+library(scales)
+```
+
+```{r}
+ggplot() + 
+  geom_bar(
+    data=top10, 
+    aes(x=pos_team, weight=plays)) + scale_y_continuous(labels=comma)
+```
+```{r}
+ggplot() + 
+  geom_bar(
+    data=top10, 
+    aes(x=pos_team, weight=plays))
++ coord_flip()
+```
+
