@@ -167,6 +167,8 @@ ggplot() +
       )
     )
 ```
+
+
 ```{r}
 ggplot() + 
   geom_bar(
