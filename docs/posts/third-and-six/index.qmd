@@ -9,7 +9,7 @@ format:
     code-fold: true
 ---
 
-```{r, output=false}
+```{r}
 library(tidyverse)
 library(cfbfastR)
 ```
@@ -34,7 +34,7 @@ third_and_six |>
 
 
 ```{r}
-play_types <- c("Rush", "Rushing Touchdown")
+rush_plays <- c("Rush", "Rushing Touchdown")
   
 third_and_six |>
   filter(play_type %in% rush_plays) |> 
@@ -143,7 +143,7 @@ top10 <- plays_third_and_six |>
   head(10) |> 
   select(pos_team, plays)
 ```
-I don't know if I'm right but I think R is seeing that some teams have the same amount of plays so it's thinking that they are also in the top 10. But I'm not sure why it's showing me more than ten teams.  
+I don't know if I'm right but I think R is seeing that some teams have the same amount of plays so it's thinking that they are also in the top 10. But I'm not sure why it's showing me more than ten teams.
 ```{r}
 library(ggplot2)
 library(scales)
@@ -155,11 +155,32 @@ ggplot() +
     data=top10, 
     aes(x=pos_team, weight=plays)) + scale_y_continuous(labels=comma)
 ```
+
+
 ```{r}
 ggplot() + 
   geom_bar(
     data=top10, 
-    aes(x=pos_team, weight=plays))
-+ coord_flip()
+    aes(
+      x=reorder(pos_team, plays), 
+      weight=plays
+      )
+    )
 ```
+```{r}
+ggplot() + 
+  geom_bar(
+    data=top10, 
+    aes(x=reorder(pos_team, plays),
+        weight=plays)) + 
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title="Air Force Puts Themselves in Tight Situations Often", 
+    x="Team", 
+    y="Plays") + 
+  theme_minimal() + 
+  coord_flip()
+```
+So, in conclusion, I found that Air Force ends up being the team that has run the most amount of third and six plays. Seemlingly, it means that Air Force also knows how to run the ball more and knows how to get themselves out of those situations. It's interesting because ESPN just ran an article about how Air Force is the best school in Colorado. 
 
+Oddly enough, Prime Time and his team is also on this list. For them, I don't think this is a good thing considering they have had many inconsistencies when it comes to running the ball. Look at the Stanford game when they went into double overtime and basically gave that game away last minute. Maybe Colorado would benefit in NOT finding themselves in these situations. Whereas, their state neighbor has actually benefit from those third and six plays. 
