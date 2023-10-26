@@ -1,0 +1,84 @@
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+```{r}
+logs <- read_csv("https://thescoop.org/sports-data-files/footballlogs1123.csv")
+```
+```{r}
+head(logs)
+```
+
+```{r}
+winloss <- logs |> 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+)
+```
+
+```{r}
+winloss |>
+  filter(Team == "Maryland") |>
+  group_by(Season) |>
+  summarise(
+    TotalPlays = sum(OffensivePlays),
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards),
+    TotalWins = sum(wins)) |>
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays) -> ypp
+```
+
+
+```{r}
+ggplot() + 
+  geom_point(
+    data=ypp, aes(x=OffensiveYPP, y=DefensiveYPP)
+    )
+```
+```{r}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins)
+    )
+```
+
+```{r}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins),
+    alpha = .3) + 
+  scale_size(range = c(3, 8), name="Wins")
+```
+
+```{r}
+library(ggrepel)
+```
+
+```{r}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red", 
+    alpha=.5) + 
+  geom_text_repel(
+    data=ypp,
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Season)) +
+  labs(title=" Maryland's Offense Lacks where Their Defense Picks Up", subtitle="The Terps have seen more wins when their defense and offense worked together.", caption="Source: NCAA | By Alexa Henry")  + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+```
+Maryland totaled two wins during the COVID year when teams didn't really know what was going on in the College Football conferences. This was when the defense gave up less yards and their offense ran for more yards. However, looking into this season, 2023 so far it shows that they are totaling more wins when the offense is running, you know, doing their job, and the defense is is giving up less yards. Although, 2023  season isn't over, it would be interesting to see where the bubble lands after the season concludes. Maybe to show this, we can filter by dates but that would cut off the full season for the other seasons.
+
+This idea conflicts with years like 2014 when the offense wasn't running as much and the defense was giving up more yards compared to other years. It also shows the progression of their offense since the Coach Lock era. Minus 2020, 2020 was a fluke for everyone. 
