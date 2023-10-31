@@ -1,0 +1,32 @@
+---
+title: "NFL Redzone EPA"
+author: "Alexa Henry"
+date: '2023-11-2'
+categories: [football, NFL]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+library(tidyverse)
+library(nflreadr)
+```
+
+```{r}
+plays <- load_pbp(2022)
+```
+
+```{r}
+head(plays)
+```
+
+```{r}
+type_plays <- c("pass", "run")
+plays |>
+  filter(play_type %in% type_plays) |>
+  filter(posteam == "MIA") |>
+  filter(week == 3) 
+```
+
