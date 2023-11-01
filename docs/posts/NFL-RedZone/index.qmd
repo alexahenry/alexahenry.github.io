@@ -76,15 +76,15 @@ nfl_plays_week3 <- nfl_plays_week3|>
   filter(week < 4) |>
   filter (yardline_100 < 20) |>
   summarise(
-    TotalEPA = sum(epa),
-    Totalplays = n())
+    TotalEPA_3 = sum(epa),
+    Totalplays_3 = n())
 ```
 
 ```{r}
 nfl_plays_week8 <- plays |>
   group_by(posteam) |>
   filter(play_type %in% type_plays) |>
-  filter(week > 4) |>
+  filter(week < 9) |>
   filter (yardline_100 < 20)
 ```
 
@@ -93,11 +93,11 @@ nfl_plays_week8 <- plays |>
 nfl_plays_week8 <- nfl_plays_week8 |>
   group_by(posteam) |>
   filter(play_type %in% type_plays) |>
-  filter(week > 4) |>
+  filter(week < 9) |>
   filter (yardline_100 < 20) |>
   summarise(
-    Totalplays = n(),
-    TotalEPA = sum(epa))
+    Totalplays_8 = n(),
+    TotalEPA_8 = sum(epa))
 ```
 
 
@@ -109,18 +109,20 @@ total_nfl <- nfl_plays_week3 |> left_join(nfl_plays_week8, join_by(posteam))
 ggplot() + 
   geom_dumbbell(
     data=total_nfl, 
-    aes(y=posteam, x=Totalplays.y, xend=TotalEPA.y)
+    aes(y=posteam, x=TotalEPA_3, xend=TotalEPA_8)
   )
 ```
 
 ```{r}
 ggplot() + 
   geom_dumbbell(
-    data=nfl_plays_week3, 
-    aes(y=posteam, x=Totalplays, xend=TotalEPA),
+    data=total_nfl, 
+    aes(y=reorder(posteam,TotalEPA_3), x=TotalEPA_3, xend=TotalEPA_8),
     size = 1,
     colour = "grey",
     colour_x = "green",
-    colour_xend = "blue")
+    colour_xend = "blue") +
+  theme_minimal() +
+  labs(title = "Most NFL teams experienced higher EPA's through week 8 in 2022", y="team")
 ```
-
+It appears some teams actually experienced a higher EPA as they continued through the 2022 season. However the outlier in this is Jacksonville. Jacksonville experienced a drop in their EPA as they went through the season. They did barely make the playoffs that year and I believe lost so this can be a reflection of their regression in the season. One team that started with a high EPA and ended with a high EPA was Kansas City and they obviously went on to win the superbowl because the Eagles defense didn't show up in the second half of the game. Regardless, besides certain teams, it does seem to be that if you start with an average EPA, teams typically finish high. 
