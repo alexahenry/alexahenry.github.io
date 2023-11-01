@@ -12,6 +12,7 @@ format:
 ```{r}
 library(tidyverse)
 library(nflreadr)
+library(ggalt)
 ```
 
 ```{r}
@@ -24,9 +25,102 @@ head(plays)
 
 ```{r}
 type_plays <- c("pass", "run")
+
 plays |>
   filter(play_type %in% type_plays) |>
   filter(posteam == "MIA") |>
-  filter(week == 3) 
+  filter(week < 4) |>
+  filter (yardline_100 < 20) |>
+  summarise(
+    Totalplays = n()
+  )
+```
+
+```{r}
+plays |>
+  filter(play_type %in% type_plays) |>
+  filter(posteam == "MIA") |>
+  filter(week < 4) |>
+  filter (yardline_100 < 20) |>
+  summarise(
+    TotalEPA = sum(epa)
+  )
+```
+```{r}
+plays |>
+  filter(play_type %in% type_plays) |>
+  filter(posteam == "MIA") |>
+  filter (yardline_100 < 20) |>
+  summarise(
+    TotalEPA = sum(epa)
+  )
+```
+In the first three weeks of the 2022 season, Miami had 9 EPA but dropped down by almost 3 points by the end of the season. 
+
+```{r}
+9.000518	- 6.102557	
+```
+
+```{r}
+nfl_plays_week3 <- plays |>
+  group_by(posteam) |>
+  filter(play_type %in% type_plays) |>
+  filter(week < 4) |>
+  filter (yardline_100 < 20)
+```
+
+```{r}
+nfl_plays_week3 <- nfl_plays_week3|>
+  group_by(posteam) |>
+  filter(play_type %in% type_plays) |>
+  filter(week < 4) |>
+  filter (yardline_100 < 20) |>
+  summarise(
+    TotalEPA = sum(epa),
+    Totalplays = n())
+```
+
+```{r}
+nfl_plays_week8 <- plays |>
+  group_by(posteam) |>
+  filter(play_type %in% type_plays) |>
+  filter(week > 4) |>
+  filter (yardline_100 < 20)
+```
+
+
+```{r}
+nfl_plays_week8 <- nfl_plays_week8 |>
+  group_by(posteam) |>
+  filter(play_type %in% type_plays) |>
+  filter(week > 4) |>
+  filter (yardline_100 < 20) |>
+  summarise(
+    Totalplays = n(),
+    TotalEPA = sum(epa))
+```
+
+
+```{r}
+total_nfl <- nfl_plays_week3 |> left_join(nfl_plays_week8, join_by(posteam)) 
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=total_nfl, 
+    aes(y=posteam, x=Totalplays.y, xend=TotalEPA.y)
+  )
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=nfl_plays_week3, 
+    aes(y=posteam, x=Totalplays, xend=TotalEPA),
+    size = 1,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "blue")
 ```
 
