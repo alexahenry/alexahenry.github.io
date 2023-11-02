@@ -47,8 +47,11 @@ plays |>
   )
 ```
 ```{r}
+type_plays <- c("pass", "run")
+
 plays |>
   filter(play_type %in% type_plays) |>
+   filter(week < 9) |>
   filter(posteam == "MIA") |>
   filter (yardline_100 < 20) |>
   summarise(
