@@ -1,0 +1,28 @@
+---
+title: "Running on Empty"
+author: "Alexa Henry"
+date: '2023-11-7-23'
+categories: [football, big ten]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+logs <- read_csv("https://www.thescoop.org/sports-data-files/footballlogs23.csv")
+```
+
+```{r}
+head(logs)
+```
+
+```{r}
+big10_runs <- logs |>
+  filter(Conference == "Big Ten Conference")
+```
+
