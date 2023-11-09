@@ -23,6 +23,32 @@ head(logs)
 
 ```{r}
 big10_runs <- logs |>
-  filter(Conference == "Big Ten Conference")
+  filter(Conference == "Big Ten Conference") |>
+  arrange(desc(RushingAvg))
 ```
 
+```{r}
+ggplot() + 
+  geom_line(data=big10_runs, aes(x=Date, y=RushingAvg, group=Team)) + 
+  scale_y_continuous(limits = c(-4, 8))
+```
+
+```{r}
+ggplot() + 
+  geom_line(data=big10_runs, aes(x=Date, y=RushingAvg, group=Team)) + 
+  scale_y_continuous(limits = c(-4, 8)) + 
+  facet_wrap(~Team)
+```
+
+```{r}
+big10_runs |> summarise(mean(RushingAvg))
+```
+
+```{r}
+ggplot() + 
+  geom_hline(yintercept=3.816, color="blue") + 
+  geom_line(data=big10_runs, aes(x=Date, y=RushingAvg, group=Team)) + 
+  scale_y_continuous(limits = c(-4, 8)) + 
+  facet_wrap(~Team)
+```
+In conclusion, Maryland's rushing average has taken a sharp turn since Oct. 15 and looks like it's on a spiral since then. Looking at teams like Penn State and Michigan, they have maintained the Big Ten average. 
