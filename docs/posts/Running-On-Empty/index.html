@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Alexa Henry">
-<meta name="dcterms.date" content="2023-10-26">
 
-<title>Alexa’s Corner - Volleyball Aces</title>
+<title>Alexa’s Corner - Running on Empty</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -141,7 +140,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Volleyball Aces</h1>
+      <h1 class="title">Running on Empty</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">football</div>
                 <div class="quarto-category">big ten</div>
@@ -162,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 26, 2023</p>
+        <p class="date">Invalid Date</p>
       </div>
     </div>
     
@@ -189,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.2     ✔ readr     2.1.4
 ✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
 ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
 ✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -197,30 +196,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbeeswarm)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>players <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/dwillis/NCAAWomensVolleyballData/main/data/ncaa_womens_volleyball_playerstats_2023.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>logs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www.thescoop.org/sports-data-files/footballlogs23.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 5133 Columns: 33
+<pre><code>Rows: 1205 Columns: 54
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
-chr  (7): team, full_name, roster_name, last_name, first_name, yr, pos
-dbl (24): season, jersey, feet, inches, gp, gs, mp, s, kills, errors, total_...
-lgl  (2): ms, total_blocks
+chr   (8): HomeAway, Opponent, Result, TeamFull, TeamURL, Outcome, Team, Con...
+dbl  (45): Game, PassingCmp, PassingAtt, PassingPct, PassingYds, PassingTD, ...
+date  (1): Date
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -229,77 +217,85 @@ lgl  (2): ms, total_blocks
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>vb20 <span class="ot">&lt;-</span> players <span class="sc">|&gt;</span> <span class="fu">filter</span>(mp<span class="sc">&gt;</span><span class="dv">20</span>, <span class="sc">!</span><span class="fu">is.na</span>(aces), <span class="sc">!</span><span class="fu">is.na</span>(pos))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>vb20 <span class="ot">&lt;-</span> vb20 <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">acespermatch =</span> aces<span class="sc">/</span>mp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(vb20<span class="sc">$</span>acespermatch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(logs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.0000  0.1905  0.6250  0.6222  0.9545  2.2083 </code></pre>
+<pre><code># A tibble: 6 × 54
+   Game Date       HomeAway Opponent     Result PassingCmp PassingAtt PassingPct
+  &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1     1 2023-09-02 &lt;NA&gt;     Tennessee-M… W (48…         26         40       65  
+2     2 2023-09-09 &lt;NA&gt;     Ball State   W (45…         24         33       72.7
+3     3 2023-09-16 &lt;NA&gt;     South Carol… W (24…         27         35       77.1
+4     4 2023-09-23 &lt;NA&gt;     Alabama-Bir… W (49…         28         40       70  
+5     5 2023-09-30 @        Auburn       W (27…         23         33       69.7
+6     6 2023-10-07 &lt;NA&gt;     Kentucky     W (51…         33         42       78.6
+# ℹ 46 more variables: PassingYds &lt;dbl&gt;, PassingTD &lt;dbl&gt;, RushingAtt &lt;dbl&gt;,
+#   RushingYds &lt;dbl&gt;, RushingAvg &lt;dbl&gt;, RushingTD &lt;dbl&gt;, OffensivePlays &lt;dbl&gt;,
+#   OffensiveYards &lt;dbl&gt;, OffenseAvg &lt;dbl&gt;, FirstDownPass &lt;dbl&gt;,
+#   FirstDownRush &lt;dbl&gt;, FirstDownPen &lt;dbl&gt;, FirstDownTotal &lt;dbl&gt;,
+#   Penalties &lt;dbl&gt;, PenaltyYds &lt;dbl&gt;, Fumbles &lt;dbl&gt;, Interceptions &lt;dbl&gt;,
+#   TotalTurnovers &lt;dbl&gt;, TeamFull &lt;chr&gt;, TeamURL &lt;chr&gt;, Outcome &lt;chr&gt;,
+#   TeamScore &lt;dbl&gt;, OpponentScore &lt;dbl&gt;, DefPassingCmp &lt;dbl&gt;, …</code></pre>
 </div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>vb20 <span class="ot">&lt;-</span> vb20 <span class="sc">|&gt;</span> <span class="fu">filter</span>(acespermatch <span class="sc">&gt;</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>big10_runs <span class="ot">&lt;-</span> logs <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Conference <span class="sc">==</span> <span class="st">"Big Ten Conference"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(RushingAvg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_beeswarm</span>(<span class="at">data=</span>vb20, <span class="fu">aes</span>(<span class="at">x=</span>pos, <span class="at">y=</span>aces), <span class="at">color=</span><span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>big10_runs, <span class="fu">aes</span>(<span class="at">x=</span>Date, <span class="at">y=</span>RushingAvg, <span class="at">group=</span>Team)) <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>umd <span class="ot">&lt;-</span> vb20 <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(team <span class="sc">==</span> <span class="st">"Maryland Terrapins, Terps"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(acespermatch<span class="sc">&gt;</span><span class="fl">0.95</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(acespermatch))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>big10_runs, <span class="fu">aes</span>(<span class="at">x=</span>Date, <span class="at">y=</span>RushingAvg, <span class="at">group=</span>Team)) <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">8</span>)) <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Team)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>vb20, </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">groupOnX=</span><span class="cn">TRUE</span>, </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>pos, <span class="at">y=</span>aces), <span class="at">color=</span><span class="st">"grey"</span>) <span class="sc">+</span> </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>(</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>umd, </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">groupOnX=</span><span class="cn">TRUE</span>, </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>pos, <span class="at">y=</span>aces), <span class="at">color=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_text_repel</span>(</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>umd, </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>pos, <span class="at">y=</span>aces, <span class="at">label=</span>full_name)) <span class="sc">+</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Maryand Players Land Middle of the Road in Aces Per Match"</span>, <span class="at">subtitle=</span><span class="st">"Gunter and Csire lead the way in aces per match with Engel right behind them."</span>, <span class="at">caption=</span><span class="st">"Source: NCAA | By Alexa Henry"</span>)  <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>), </span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">10</span>), </span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: The `groupOnX` argument of `geom_beeswarm()` is deprecated as of ggbeeswarm
-0.7.1.
-ℹ ggplot2 now handles this case automatically.</code></pre>
-</div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Gunter and Csire are close to each other when it comes to aces per match with Engel just under them by a hair. However, they land in the middle of the road among other players like them. By position, Gunter lands among the few that are able to rack up aces per match which speaks to how valuable the transfer has been since coming from Mississippi State. Csire lands among the average side of the pack when it comes to aces per match. Again, it still speaks to how valuable she is but it does show that her numbers are common among peers like her. Engel, who is transitioning into more of a DS role on the team, lands more towards the bottom among setters. Her numbers can be better but she only comes into serve for the team because she is so affective behind the service line.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>big10_runs <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(RushingAvg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `mean(RushingAvg)`
+               &lt;dbl&gt;
+1               3.82</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fl">3.816</span>, <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>big10_runs, <span class="fu">aes</span>(<span class="at">x=</span>Date, <span class="at">y=</span>RushingAvg, <span class="at">group=</span>Team)) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">8</span>)) <span class="sc">+</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Team)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It’s pretty concerning that a lof the teams in the Big Ten are flat line going into the home stretch of the season. I know around this time teams usually start to either fall off, like Maryland, or start to just average out. But for teams like Penn State and Michigan who shouldn’t be flat lining, this can become a concern. Penn State is trying to make a case for themselves to be in the top 4 even with a loss to Ohio State. Maybe we’ll see if they beat them tomorrow and see if that can make case for them. However, Michigan and Ohio State are flat line and they are already in the top 4. Ohio State had a slight improvement since their last game but you can see in their chart that even with starting the season strong above the average rushing mean of the Big Ten, they dipped off in two weeks. Seemingly against Purdue and Wisconsin. They won both of those games and out rushed their opponent. I’m sure if we compared that to teams like FSU and Georgia, it might look different.</p>
+<p>Start with Maryland, for example. Started off the year 5-0 and are currently 5-4 before the game against Nebraska. (Wish this assignment was due tomorrow especially with recent news with Michigan). Maryland’s rushing average has taken a sharp turn since Oct.&nbsp;15 and looks like it’s on a spiral since then. Maryland had a season high of 4 turnovers during the Penn State game. Barely rushed the ball at all. Their downward spiral makes sense.</p>
 
 
 
