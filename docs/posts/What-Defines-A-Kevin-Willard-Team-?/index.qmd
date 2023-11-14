@@ -1,0 +1,32 @@
+---
+title: "What Defines a Kevin Willard Team?"
+author: "Alexa Henry"
+date: '2023-11-14'
+categories: [football, big ten]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+games <- read_csv("https://thescoop.org/sports-data-files/cbblogs1524.csv")
+```
+
+```{r}
+Seton_Hall <- games |>
+  filter(TeamFull == "Seton Hall Pirates", Date <= "2022-03-05")
+
+Maryland <- games |>
+  filter(TeamFull == "Maryland Terrapins", Date >= "2022-11-07")
+```
+
+
+```{r}
+
+```
+
