@@ -1,7 +1,7 @@
 ---
 title: "What Defines a Kevin Willard Team?"
 author: "Alexa Henry"
-date: '2023-11-14'
+date: '2023-11-17'
 categories: [football, big ten]
 image: "image.png"
 format: 
