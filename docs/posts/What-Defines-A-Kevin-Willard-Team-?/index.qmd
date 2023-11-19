@@ -27,6 +27,41 @@ Maryland <- games |>
 
 
 ```{r}
+Seton_Hall |>
+  group_by(Season) |>
+  summarise(
+    TotalFGPCT = sum(TeamFGPCT),
+    TotalOppFGPCT = sum(OpponentFGPCT), 
+    TotalOffRebounds = sum(TeamOffRebounds), 
+    TotalOppRebounds = sum(OpponentOffRebounds)
+  )
 
+Maryland |>
+  group_by(Season) |>
+  summarise(
+    TotalFGPCT = sum(TeamFGPCT),
+    TotalOppFGPCT = sum(OpponentFGPCT), 
+    TotalOffRebounds = sum(TeamOffRebounds), 
+    TotalOppRebounds = sum(OpponentOffRebounds)
+  )
 ```
+
+```{r}
+ggplot() + 
+  geom_line(data=Seton_Hall, aes(x=TeamFGPCT, y=Season), color="blue") + 
+  geom_line(data=Maryland, aes(x=TeamFGPCT, y=Season), color="red")
+```
+I don't think I did something entirely right here but I don't think I'm entirely wrong. Just looking at field goal percentage it seems like the Maryland team from last year preformed just as well as his first season at Seton Hall. Could it be that Willard has a better season in his first season coming to a new place than seasons after that? I think that's interesting because some coaches actually don't have a lot of success in their first season coming into a new conference or team. The closest team to that Maryland team from last year was his 2016-2017 and his 2021-2022. In 2021-2022, his Seton Hall team was outsted by TCU in the first round.   
+
+```{r}
+ggplot() + 
+  geom_line(data=Seton_Hall, aes(x=TeamOffRebounds, y=Season), color="blue") + 
+  geom_line(data=Maryland, aes(x=TeamOffRebounds, y=Season), color="red")
+```
+For rebounds, it looks like his team back in 2016-2017. That year, they made it to the Big East tournament but had a quick exit from the NCAA tournament to number 8 Arkansas. Since then it looks like Willard's teams have not been able to reach almost 25 offensive rebounds. We can see that in the lack of offensive rebounds from last year's Maryland team and so far how they are doing this year. 
+
+P.S. I want to make these charts look better because I think there's something here.
+
+
+
 
